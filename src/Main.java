@@ -29,17 +29,19 @@ public class Main {
         System.out.println(lastNames);
 
 
-        persons.stream()
-                .filter(person -> person.getEducation().equals(Education.HIGHER))
-                .filter(person -> {
-                    if(person.getSex().equals(Sex.WOMAN) ){
-                        return person.getAge() >= 18 && person.getAge() <= 60;
-                    } else {
-                        return person.getAge() >= 18 && person.getAge() <= 65;
-                    }
-                })
-                .sorted((person1, person2) -> person1.getFamily().compareTo(person2.getFamily()))
-                .forEach(System.out::println);
+        List<Person> potentialWorkers = persons.stream()
+
+                .filter(person -> (person.getSex() == Sex.WOMAN && person.getAge() >= 18 && person.getAge() <= 60) ||
+
+                        (person.getSex() == Sex.MAN && person.getAge() >= 18 && person.getAge() <= 65))
+
+                .filter(person -> person.getEducation() == Education.HIGHER)
+
+                .sorted(Comparator.comparing(Person::getFamily))
+
+                .toList();
+
+        System.out.println("Отсортированный список работоспособных людей: " + potentialWorkers);
 
     }
 }
